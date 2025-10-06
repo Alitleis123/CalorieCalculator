@@ -246,10 +246,10 @@ const styles = {
   page: {
     minHeight: "100svh",
     display: "grid",
-    placeItems: "center",
+    placeItems: "start center",
     background: "#0b1220",
     color: "#e8ecf3",
-    padding: "24px",
+    padding: "clamp(96px, 12vh, 144px) 24px 48px",
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"',
   },
