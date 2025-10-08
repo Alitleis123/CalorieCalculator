@@ -1,67 +1,222 @@
+/* =========================================================
+   FAANG-grade global stylesheet (blue/black glass UI)
+   - Design tokens (dark+light)
+   - Modern reset + a11y
+   - Fast focus rings & smooth interactions
+   - Utilities for layout, cards, buttons
+   ========================================================= */
+
+/* ---------------- Design Tokens ---------------- */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* --- Perfectly balanced dark gradient --- */
+  --bg: linear-gradient(
+    180deg,
+    #0b1220 0%,   /* deep navy top */
+    #0c1528 40%,  /* gradual mid transition */
+    #090f1d 75%,  /* smooth blend */
+    #070d18 100%  /* soft dark finish */
+  );
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Brand / accent */
+  --accent: #6aa8ff;
+  --accent-weak: rgba(106,168,255,.12);
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+  /* Text */
+  --text: #e8ecf3;
+  --text-muted: rgba(232,236,243,0.75);
+
+  /* Dark surfaces & borders (ensure these exist in dark too) */
+  color-scheme: dark;
+  --surface-0: rgba(255,255,255,0.02);
+  --surface-1: rgba(255,255,255,0.04);
+  --surface-2: rgba(255,255,255,0.06);
+  --surface-glass: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+  --border: rgba(255,255,255,0.12);
+  --border-strong: rgba(255,255,255,0.20);
+
+  /* Radii / shadows / spacing */
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-lg: 0 24px 60px rgba(0,0,0,.55);
+  --shadow-md: 0 16px 40px rgba(0,0,0,.45);
+
+  /* Typography scale */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter,
+               "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  --fs-1: clamp(28px, 2.8vw, 44px);
+  --fs-2: clamp(18px, 2vw, 24px);
+  --fs-3: 15px;
+}
+
+/* Optional light theme (if you flip data-theme="light") */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: radial-gradient(1200px 800px at 10% -10%, #e9f0ff 0%, transparent 35%),
+        radial-gradient(1000px 700px at 110% -20%, #eff2fb 0%, transparent 45%),
+        #ffffff;
+  --surface-0: rgba(0,0,0,0.02);
+  --surface-1: rgba(0,0,0,0.04);
+  --surface-2: rgba(0,0,0,0.06);
+  --surface-glass: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));
+  --border: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.18);
+  --text: #1b2430;
+  --text-muted: rgba(27,36,48,0.75);
+  --shadow-lg: 0 24px 60px rgba(0,0,0,.18);
+  --shadow-md: 0 16px 40px rgba(0,0,0,.14);
+  --accent-weak: rgba(60,130,246,.14);
+}
+
+/* ---------------- Reset / Base ---------------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { height: 100%; }
+html:focus-within { scroll-behavior: smooth; }
+
+body, h1, h2, h3, h4, p, figure, blockquote, dl, dd { margin: 0; }
+body {
+  min-height: 100%;
+  background: var(--bg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: scroll;
+  color: var(--text);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+img, picture { max-width: 100%; display: block; }
+#root { min-height: 100%; }
+html, #root { background: var(--bg); }
+
+/* ---------------- Typography ---------------- */
+.h1, h1 { font-size: var(--fs-1); font-weight: 800; letter-spacing: .2px; line-height: 1.15; }
+.h2, h2 { font-size: var(--fs-2); font-weight: 700; letter-spacing: .2px; line-height: 1.2; }
+.muted, small { color: var(--text-muted); font-size: var(--fs-3); }
+
+/* Gradient headline utility */
+.gradient-text {
+  background: linear-gradient(92deg, #ffffff 0%, #9ec5ff 45%, #7aa7ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+/* ---------------- Links ---------------- */
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ---------------- Forms (fast, polished) ---------------- */
+label { font-weight: 600; }
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  color: var(--text);
+  outline: none;
+  transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease, transform 120ms ease;
+  will-change: transform;
 }
-a:hover {
-  color: #535bf2;
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-weak);
+  background: var(--surface-2);
 }
 
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-  padding: 0;
-}
+/* Number input clean-up on WebKit */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+/* ---------------- Buttons ---------------- */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(120,170,255,.22), rgba(120,170,255,.12));
+  color: var(--text);
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: transform 120ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
+  will-change: transform;
 }
-button:hover {
-  border-color: #646cff;
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border-strong);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.button:active { transform: translateY(0); }
+
+/* Quiet button variant */
+.button.ghost {
+  background: var(--surface-1);
+  border-color: var(--border);
+}
+.button.ghost:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+/* ---------------- Cards / Surfaces ---------------- */
+.card {
+  background: var(--surface-glass);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+.card-hover { transition: transform 160ms ease, box-shadow 160ms ease; }
+.card-hover:hover { transform: translateY(-1px); box-shadow: var(--shadow-lg); }
+
+/* ---------------- Utilities ---------------- */
+.container { width: min(1200px, 100%); margin-inline: auto; padding-inline: clamp(16px, 4vw, 48px); }
+.center { display: grid; place-items: center; }
+.stack-12 > * + * { margin-top: 12px; }
+.stack-16 > * + * { margin-top: 16px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.auto-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; }
+
+/* Navbar blur helper (if you want a class instead of inline styles) */
+.nav-blur {
+  background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0));
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--surface-2);
+}
+
+/* Gradient divider utility */
+.hr {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+  border: 0;
+}
+
+/* ---------------- A11y focus ---------------- */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------------- Motion prefs ---------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
+
+/* ---------------- Selection & Scrollbars ---------------- */
+::selection { background: rgba(106,168,255,.35); color: #fff; }
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-track { background: transparent; }
