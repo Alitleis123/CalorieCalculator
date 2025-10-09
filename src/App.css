@@ -186,3 +186,110 @@
   background: transparent;
   pointer-events: none;
 }
+
+/* Fade-in animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Apply staggered delay for key form sections */
+.fade-in:nth-child(1) { animation-delay: 0.1s; }
+.fade-in:nth-child(2) { animation-delay: 0.2s; }
+.fade-in:nth-child(3) { animation-delay: 0.3s; }
+.fade-in:nth-child(4) { animation-delay: 0.4s; }
+.fade-in:nth-child(5) { animation-delay: 0.5s; }
+
+/* Apply to form fields and result tiles */
+.card-xl input,
+.card-xl select,
+.card-xl .tile {
+  animation: fadeInUp 0.6s ease both;
+}
+
+/* ===== BMI Scale (matches App.jsx BmiScale) ===== */
+.bmi-scale {
+  margin-top: 10px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Track */
+.bmi-track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02), inset 0 6px 10px rgba(0,0,0,0.30);
+  overflow: hidden;
+}
+
+/* Colored fill – stops at current BMI */
+.bmi-fill {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 100%;
+  border-radius: inherit;
+
+  /* Smooth gradient aligned with divider variables */
+  background: linear-gradient(90deg,
+    #0d7af6 0%,
+    #76b5f8 var(--under),
+    #ffffff calc((var(--under) + var(--normalEnd)) / 2),
+    #ff6f6f var(--normalEnd),
+    #ff0000 100%
+  );
+
+  /* Reveal gradient only up to current BMI position */
+  -webkit-mask: linear-gradient(to right, #000 0 var(--pct), transparent var(--pct) 100%);
+          mask: linear-gradient(to right, #000 0 var(--pct), transparent var(--pct) 100%);
+}
+
+/* Category dividers between underweight, normal, and overweight */
+.bmi-divider {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px;
+  height: 18px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 1px;
+  pointer-events: none;
+}
+
+/* Marker */
+.bmi-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid rgba(255,255,255,0.35);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+/* Legend */
+.bmi-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.8);
+}
+.bmi-legend-item { flex: 1; text-align: center; }
